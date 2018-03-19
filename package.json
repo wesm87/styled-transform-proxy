@@ -3,12 +3,10 @@
   "version": "0.0.7",
   "author": "Wes Moberly <github.wes@mailhero.io>",
   "license": "MIT",
+  "description": "A wrapper function for extending styled-components via a custom transform function",
   "main": "lib/index.js",
   "files": "lib/**/*.js",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wesm87/styled-transform-proxy.git"
-  },
+  "repository": "https://github.com/wesm87/styled-transform-proxy.git",
   "scripts": {
     "build": "rm -rf lib/* && babel src --out-dir lib --no-comments",
     "prepublishOnly": "yarn build",
@@ -29,7 +27,6 @@
     "eslint": "^4.19.0",
     "eslint-plugin-flowtype": "^2.46.1",
     "eslint-plugin-import": "^2.9.0",
-    "eslint-plugin-jsx-a11y": "^6.0.3",
     "flow-bin": "^0.68.0",
     "flow-typed": "^2.4.0"
   }

@@ -11,7 +11,7 @@ import {
   any,
   allPass,
   is,
-} from 'ramda';
+} from 'ramda'
 
 type UnaryFn<I, R=I> = (I) => R;
 type VariadicFn<R> = (...*) => R;
@@ -20,22 +20,22 @@ type ProxyFn = (Array<string>, ...*) => Array<*>;
 type TemplateFn = (Array<string>, ...*) => Array<String | Function>;
 type TemplateFactory = VariadicFn<TemplateFn>;
 
-const CHAINABLE_TEMPLATE_FACTORY_METHODS = ['attrs', 'withConfig'];
+const CHAINABLE_TEMPLATE_FACTORY_METHODS = ['attrs', 'withConfig']
 
-const isChainableTemplateFactoryMethod = contains(__, CHAINABLE_TEMPLATE_FACTORY_METHODS);
+const isChainableTemplateFactoryMethod = contains(__, CHAINABLE_TEMPLATE_FACTORY_METHODS)
 
 const isTemplateFactoryMethod = curry((val: Object | Function, key: string) =>
   allPass([
     isChainableTemplateFactoryMethod,
     propIs(Function, __, val),
   ])(key)
-);
+)
 
 const hasTemplateFactoryMethods = (val: Object | Function) =>
   compose(
     any(isTemplateFactoryMethod(val)),
     keys,
-  )(val);
+  )(val)
 
 /**
  * Takes a transform function and a source function and returns a thunk that accepts any
@@ -48,62 +48,62 @@ const createThunkWith = curry(
   (transform: UnaryFn<*>, fn: VariadicFn<*>): VariadicFn<*> =>
     (...args) =>
       transform(fn(...args))
-);
+)
 
 const proxy = curry(
   (proxyFn: ProxyFn, styledTemplateFn: TemplateFn): TemplateFn => {
     const proxiedTemplateFn = (strings, ...interpolations) => {
-      const proxiedTemplateFnResults = proxyFn(strings, ...interpolations);
+      const proxiedTemplateFnResults = proxyFn(strings, ...interpolations)
 
-      return styledTemplateFn(...proxiedTemplateFnResults);
-    };
+      return styledTemplateFn(...proxiedTemplateFnResults)
+    }
 
-    return proxiedTemplateFn;
+    return proxiedTemplateFn
   }
-);
+)
 
 const makeProxiedTemplateFunction = curry(
   (proxyFn: ProxyFn, styledTemplateFn: TemplateFn): TemplateFn => {
-    const templateFn = proxy(proxyFn, styledTemplateFn);
+    const templateFn = proxy(proxyFn, styledTemplateFn)
 
     CHAINABLE_TEMPLATE_FACTORY_METHODS.forEach((methodName) => {
-      const originalMethod = styledTemplateFn[methodName];
+      const originalMethod = styledTemplateFn[methodName]
 
       if (is(Function, originalMethod)) {
         templateFn[methodName] = createThunkWith(
           makeProxiedTemplateFunction(proxyFn),
           originalMethod,
-        );
+        )
       }
-    });
+    })
 
-    return templateFn;
+    return templateFn
   }
-);
+)
 
 const makeProxiedTemplateFactory = curry(
   (proxyFn: ProxyFn, styled: TemplateFactory): TemplateFactory =>
     createThunkWith(makeProxiedTemplateFunction(proxyFn), styled)
-);
+)
 
 const styledTransformProxy = curry(
   (transformFn: (...*) => *, styled: *) => {
     const styledReducer = (acc: Function, key: string) => {
-      const sourceValue = styled[key];
+      const sourceValue = styled[key]
 
       if (is(Function, sourceValue) && hasTemplateFactoryMethods(sourceValue)) {
-        acc[key] = makeProxiedTemplateFunction(transformFn, sourceValue);
+        acc[key] = makeProxiedTemplateFunction(transformFn, sourceValue)
       }
 
-      return acc;
-    };
+      return acc
+    }
 
     // styled(Component)
-    const styledProxied = makeProxiedTemplateFactory(transformFn);
+    const styledProxied = makeProxiedTemplateFactory(transformFn)
 
     // styled.div, styled.span, etc.
-    return reduce(styledReducer, styledProxied, keys(styled));
+    return reduce(styledReducer, styledProxied, keys(styled))
   }
-);
+)
 
-export default styledTransformProxy;
+export default styledTransformProxy

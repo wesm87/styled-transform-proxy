@@ -122,6 +122,9 @@ module.exports = {
     radix: 'warn',
     'require-yield': 'warn',
     'rest-spread-spacing': ['warn', 'never'],
+    semi: ['error', 'never', {
+      beforeStatementContinuationChars: 'always',
+    }],
     strict: ['warn', 'never'],
     'unicode-bom': ['warn', 'never'],
     'use-isnan': 'warn',
