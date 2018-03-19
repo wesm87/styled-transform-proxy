@@ -1,6 +1,6 @@
 {
   "name": "styled-transform-proxy",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "author": "Wes Moberly <github.wes@mailhero.io>",
   "license": "MIT",
   "main": "lib/index.js",
