@@ -6,12 +6,10 @@ module.exports = {
   plugins: [
     'import',
     'flowtype',
-    'jsx-a11y',
   ],
   extends: [
     'plugin:import/recommended',
     'plugin:flowtype/recommended',
-    'plugin:jsx-a11y/recommended',
   ],
   env: {
     browser: true,
