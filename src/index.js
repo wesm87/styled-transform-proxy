@@ -3,7 +3,7 @@
 import {
   __,
   curry,
-  pipe,
+  compose,
   propIs,
   contains,
   keys,
@@ -22,17 +22,19 @@ type TemplateFactory = VariadicFn<TemplateFn>;
 
 const CHAINABLE_TEMPLATE_FACTORY_METHODS = ['attrs', 'withConfig'];
 
+const isChainableTemplateFactoryMethod = contains(__, CHAINABLE_TEMPLATE_FACTORY_METHODS);
+
 const isTemplateFactoryMethod = curry((val: Object | Function, key: string) =>
   allPass([
-    contains(__, CHAINABLE_TEMPLATE_FACTORY_METHODS),
+    isChainableTemplateFactoryMethod,
     propIs(Function, __, val),
   ])(key)
 );
 
 const hasTemplateFactoryMethods = (val: Object | Function) =>
-  pipe(
-    keys,
+  compose(
     any(isTemplateFactoryMethod(val)),
+    keys,
   )(val);
 
 /**
