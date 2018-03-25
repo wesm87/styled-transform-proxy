@@ -108,7 +108,7 @@ const applyTransforms = compose(
 export default applyTransforms(styled);
 ```
 
-## Third-party libraries
+### Third-party libraries
 
 If you're creating a third-party package that utilizes `styled-transform-proxy` you can simplify things a bit compared to the above examples. In addition to the wrapper function being curried, it takes the original `styled` function as its last argument, meaning instead of this:
 
