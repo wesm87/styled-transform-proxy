@@ -100,12 +100,26 @@ import { compose } from 'ramda';
 const transformFoo = (strings, ...interpolations) => [...];
 const transformBar = (strings, ...interpolations) => [...];
 
-const proxy = compose(
+const applyTransforms = compose(
   styledTransformProxy(transformFoo),
   styledTransformProxy(transformBar),
 );
 
-export default proxy(styled);
+export default applyTransforms(styled);
+```
+
+### Third-party libraries
+
+If you're creating a third-party package that utilizes `styled-transform-proxy` you can simplify things a bit compared to the above examples. In addition to the wrapper function being curried, it takes the original `styled` function as its last argument, meaning instead of this:
+
+```js
+export default (styled) => styledTransformProxy(transform, styled);
+```
+
+...you can simply do this:
+
+```js
+export default styledTransformProxy(transform);
 ```
 
 ## Caveats
