@@ -99,7 +99,7 @@ const styledTransformProxy = curry(
     }
 
     // styled(Component)
-    const styledProxied = makeProxiedTemplateFactory(transformFn)
+    const styledProxied = makeProxiedTemplateFactory(transformFn, styled)
 
     // styled.div, styled.span, etc.
     return reduce(styledReducer, styledProxied, keys(styled))
