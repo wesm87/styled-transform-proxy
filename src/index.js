@@ -20,20 +20,20 @@ type ProxyFn = (Array<string>, ...*) => Array<*>;
 type TemplateFn = (Array<string>, ...*) => Array<String | Function>;
 type TemplateFactory = VariadicFn<TemplateFn>;
 
-const CHAINABLE_TEMPLATE_FACTORY_METHODS = ['attrs', 'withConfig']
+const TEMPLATE_FACTORY_FN_NAMES = ['attrs', 'withConfig']
 
-const isChainableTemplateFactoryMethod = contains(__, CHAINABLE_TEMPLATE_FACTORY_METHODS)
+const isTemplateFactoryFnName = contains(__, TEMPLATE_FACTORY_FN_NAMES)
 
-const isTemplateFactoryMethod = curry((val: Object | Function, key: string) =>
+const isTemplateFactoryFn = curry((val: Object | Function, key: string) =>
   allPass([
-    isChainableTemplateFactoryMethod,
+    isTemplateFactoryFnName,
     propIs(Function, __, val),
   ])(key)
 )
 
-const hasTemplateFactoryMethods = (val: Object | Function) =>
+const hasAnyTemplateFactoryFn = (val: Object | Function) =>
   compose(
-    any(isTemplateFactoryMethod(val)),
+    any(isTemplateFactoryFn(val)),
     keys,
   )(val)
 
@@ -66,13 +66,13 @@ const makeProxiedTemplateFunction = curry(
   (proxyFn: ProxyFn, styledTemplateFn: TemplateFn): TemplateFn => {
     const templateFn = proxy(proxyFn, styledTemplateFn)
 
-    CHAINABLE_TEMPLATE_FACTORY_METHODS.forEach((methodName) => {
-      const originalMethod = styledTemplateFn[methodName]
+    TEMPLATE_FACTORY_FN_NAMES.forEach((fnName) => {
+      const originalFn = styledTemplateFn[fnName]
 
-      if (is(Function, originalMethod)) {
-        templateFn[methodName] = createThunkWith(
+      if (is(Function, originalFn)) {
+        templateFn[fnName] = createThunkWith(
           makeProxiedTemplateFunction(proxyFn),
-          originalMethod,
+          originalFn,
         )
       }
     })
@@ -91,8 +91,10 @@ const styledTransformProxy = curry(
     const styledReducer = (acc: Function, key: string) => {
       const sourceValue = styled[key]
 
-      if (is(Function, sourceValue) && hasTemplateFactoryMethods(sourceValue)) {
+      if (is(Function, sourceValue) && hasAnyTemplateFactoryFn(sourceValue)) {
         acc[key] = makeProxiedTemplateFunction(transformFn, sourceValue)
+      } else {
+        acc[key] = sourceValue
       }
 
       return acc
