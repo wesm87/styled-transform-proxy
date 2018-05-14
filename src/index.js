@@ -93,8 +93,6 @@ const styledTransformProxy = curry(
 
       if (is(Function, sourceValue) && hasAnyTemplateFactoryFn(sourceValue)) {
         acc[key] = makeProxiedTemplateFunction(transformFn, sourceValue)
-      } else {
-        acc[key] = sourceValue
       }
 
       return acc
