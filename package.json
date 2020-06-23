@@ -1,11 +1,13 @@
 {
   "name": "styled-transform-proxy",
-  "version": "0.0.10",
+  "version": "0.2.0",
   "author": "Wes Moberly <github.wes@mailhero.io>",
   "license": "MIT",
   "description": "A wrapper function for extending styled-components via a custom transform function",
   "main": "lib/index.js",
-  "files": ["lib/**/*.js"],
+  "files": [
+    "lib/**/*.js"
+  ],
   "repository": "https://github.com/wesm87/styled-transform-proxy.git",
   "scripts": {
     "check-types": "tsc",
