@@ -1,5 +1,3 @@
-// @flow
-
 import { __, curry, compose, propIs, contains, keys, reduce, any, allPass, is } from 'ramda';
 
 type GenericObject = { [key: string]: any };

@@ -60,5 +60,3 @@ typings/
 # Build files
 lib/
 
-# Type defintions
-flow-typed
