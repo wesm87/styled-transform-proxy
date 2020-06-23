@@ -13,10 +13,12 @@ type TemplateFactory = VariadicFn<TemplateFn>;
 
 const TEMPLATE_FACTORY_FN_NAMES = ['attrs', 'withConfig'];
 
-const isTemplateFactoryFnName = contains(__, TEMPLATE_FACTORY_FN_NAMES);
+const isTemplateFactoryFnName = (fnName: string) => contains(fnName, TEMPLATE_FACTORY_FN_NAMES);
+
+const isTemplateFactoryFnProp = (obj: GenericObject) => (key: string) => propIs(Function, key, obj);
 
 const isTemplateFactoryFn = curry((val: GenericObject | GenericFunction, key: string) =>
-  allPass([isTemplateFactoryFnName, propIs(Function, __, val)])(key),
+  allPass([isTemplateFactoryFnName, isTemplateFactoryFnProp(val)])(key),
 );
 
 const hasAnyTemplateFactoryFn = (val: GenericObject | GenericFunction) =>
@@ -68,7 +70,7 @@ const makeProxiedTemplateFactory = curry(
 );
 
 const styledTransformProxy = curry((transformFn: GenericFunction, styled: any) => {
-  const styledReducer = (acc: GenericFunction, key: string) => {
+  const styledReducer = (acc: GenericFunction, key: string | number | symbol) => {
     const sourceValue = styled[key];
 
     if (is(Function, sourceValue) && hasAnyTemplateFactoryFn(sourceValue)) {

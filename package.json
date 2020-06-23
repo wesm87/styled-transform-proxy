@@ -8,6 +8,7 @@
   "files": ["lib/**/*.js"],
   "repository": "https://github.com/wesm87/styled-transform-proxy.git",
   "scripts": {
+    "check-types": "tsc",
     "build": "rm -rf lib/* && babel src --out-dir 'lib' --extensions '.ts' --no-comments",
     "prepublishOnly": "yarn build",
     "postversion": "git push && git push --tags"
