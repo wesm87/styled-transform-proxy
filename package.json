@@ -5,9 +5,8 @@
   "license": "MIT",
   "description": "A wrapper function for extending styled-components via a custom transform function",
   "main": "lib/index.js",
-  "files": [
-    "lib/**/*.js"
-  ],
+  "types": "lib/index.d.ts",
+  "files": ["lib/**/*.js"],
   "repository": "https://github.com/wesm87/styled-transform-proxy.git",
   "scripts": {
     "build:types": "tsc",
