@@ -1,6 +1,6 @@
 {
   "name": "styled-transform-proxy",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "author": "Wes Moberly <github.wes@mailhero.io>",
   "license": "MIT",
   "description": "A wrapper function for extending styled-components via a custom transform function",
